@@ -306,10 +306,10 @@ Misc Azure resources to show what they would look like in the GUI. I sometimes s
 Don't forget to add approval requirements on each environment your pushing the deployment through. Here I'm just showing approvals for the deletion environment, but in Production we would have it on every stage as well as branch control ensuring that code is only deployed from the main branch, or a release tag.
 
 ![settingsEnvs](./img/settingsEnvs.png)
+![settingsEnvsApproval](./img/settingsEnvsApproval.png)
 
 You'll need to enable cross-project repository access in order to utilise `glb-libraries` from project1 and other projects.
 
-![settingsEnvsApproval](./img/settingsEnvsApproval.png)
 ![settingsRepos](./img/settingsRepos.png)
 
 ## Conclusion
