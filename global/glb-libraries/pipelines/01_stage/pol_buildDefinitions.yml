@@ -1,0 +1,10 @@
+parameters:
+  environment: ""
+
+stages:
+- stage:
+  displayName: 🏠 .Build Definitions. 🏗️
+  jobs:
+  - template: /pipelines/02_job/policy/pol_buildDefinitions.yml
+    parameters:
+      environment: ${{ parameters.environment }}

@@ -1,0 +1,13 @@
+parameters:
+  svcConnection: ""
+
+
+steps:
+- task        : AzurePowerShell@5
+  displayName : 🦩 .Dynamic Vars
+  inputs      :
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : ${{ parameters.svcConnection }}
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/sub_dynamicVars.ps1
+    scriptType            : filePath

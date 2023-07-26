@@ -1,0 +1,63 @@
+parameters:
+  environment  : ""
+  mgmtGroupName: ""
+  repositories : {}
+  shortEnv     : ""
+
+
+jobs:
+- deployment :
+  displayName: Assign
+  environment: ${{ parameters.environment }}_Release
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: libraries
+        - ${{ each repo in parameters.repositories }}:
+          - checkout: ${{ repo.nameShort }}
+
+
+        - template: /pipelines/03_step/sub_dynamicVars.yml
+          parameters:
+            svcConnection: $(common_svcConnectionRead)
+
+
+        - script: |
+            env | sort
+            pwd
+            tree -d
+          displayName: 🐈 .Cat Env Variables
+
+
+        - ${{ each repo in parameters.repositories }}:
+          - template: /pipelines/03_step/replace_tokens.yml
+            parameters:
+              paramsDirectory   : $(System.DefaultWorkingDirectory)/${{ repo.nameLong }}/params/${{ parameters.shortEnv }}
+              regexDirectoryName: assignments
+
+
+        - template: /pipelines/03_step/policy/pol_tsPublish.yml
+          parameters:
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+            shortEnv     : ${{ parameters.shortEnv }}
+
+
+        - task: PublishPipelineArtifact@1
+          displayName: ☝️ .Upload Assignment Parameter Artifact
+          inputs:
+            artifact  : params.json
+            targetPath: $(System.DefaultWorkingDirectory)/$(Build.Repository.Name)/params/${{ parameters.shortEnv }}/assignments/${{ parameters.mgmtGroupName }}/params.json
+
+
+        - template: /pipelines/03_step/policy/pol_assignroles.yml
+          parameters:
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+            shortEnv     : ${{ parameters.shortEnv }}
+
+
+        - template: /pipelines/03_step/policy/pol_remediation.yml
+          parameters:
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}

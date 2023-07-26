@@ -1,0 +1,18 @@
+parameters:
+  paramsDirectory   : ""
+  regexDirectoryName: ""
+
+
+steps:
+- task: PowerShell@2
+  displayName: 🔁 .Token Replacement
+  inputs:
+    errorActionPreference: stop
+    failOnStderr         : true
+    filePath             : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/replace_tokens.ps1
+    pwsh                 : true
+    targetType           : filePath
+    workingDirectory     : ${{ parameters.paramsDirectory }}
+    ${{ if parameters.regexDirectoryName }}:
+      arguments: >-
+        -RegexDirectoryName "${{ parameters.regexDirectoryName }}"

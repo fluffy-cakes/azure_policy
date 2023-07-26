@@ -1,0 +1,19 @@
+parameters:
+  condition    : ""
+  mgmtGroupName: ""
+  scope        : ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 💥 .Delete ${{ parameters.scope }}
+  condition  : ${{ parameters.condition }}
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSecAdmin)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_deletePolicies.ps1
+    scriptType            : filePath
+    scriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"
+      -scope         "${{ parameters.scope }}"

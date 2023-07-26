@@ -1,0 +1,16 @@
+{
+    "initiativeName": "pr1-gen-root",
+    "initiativeParams": {
+        "listOfAllowedLocations": {
+            "value": [
+                "uksouth"
+            ]
+        },
+        "listOfClassifications": {
+            "value": [
+                "Confidential",
+                "Highly Confidential"
+            ]
+        }
+    }
+}

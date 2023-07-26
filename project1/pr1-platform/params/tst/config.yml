@@ -1,0 +1,8 @@
+variables:
+  common_svcConnectionRead    : contino-elz-Project1-global
+  common_svcConnectionSecAdmin: contino-elz-Project1-project1
+  common_svcConnectionSsv     : contino-elz-Project1-global
+  common_svcConnectionUaa     : contino-elz-Project1-project1
+  common_svcConnectionUaaObjId: 9004bb07-a1ce-42eb-bd74-c5b5967facbe
+  policy_mgmtGroupId          : project1
+  policy_someEnvVar           : a_variable_which_can_be_used_in_token_replacement

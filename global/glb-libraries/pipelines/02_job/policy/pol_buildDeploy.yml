@@ -1,0 +1,70 @@
+parameters:
+  environment  : ""
+  mgmtGroupName: ""
+  repositories : {}
+  shortEnv     : ""
+
+
+jobs:
+- ${{ each repo in parameters.repositories }}:
+  - deployment : build_${{ parameters.mgmtGroupName }}_${{ repo.nameShort }}
+    displayName: Build ${{ repo.nameLong }}
+    environment: ${{ parameters.environment }}_Build
+    pool:
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: ${{ repo.nameShort }}
+          - checkout: libraries
+
+
+          - template: /pipelines/03_step/policy/pol_setEnvVars.yml
+            parameters:
+              configYml: $(System.DefaultWorkingDirectory)/${{ repo.nameLong }}/params/${{ parameters.environment }}/config.yml
+
+
+          - script: |
+              env | sort
+              cd ${{ repo.nameLong }}
+              pwd
+              tree
+            displayName: 🐈 .Cat Env Variables
+
+
+          - template: /pipelines/03_step/replace_tokens.yml
+            parameters:
+              paramsDirectory: $(System.DefaultWorkingDirectory)/${{ repo.nameLong }}/bicep
+
+
+          - template: /pipelines/03_step/policy/pol_biBuild.yml
+            parameters:
+              bicepFolder        : initiatives
+              buildRepositoryName: ${{ repo.nameLong }}
+
+
+          - template: /pipelines/03_step/policy/pol_biBuild.yml
+            parameters:
+              bicepFolder        : assignments
+              buildRepositoryName: ${{ repo.nameLong }}
+
+
+          - template: /pipelines/03_step/policy/pol_tsDeploy.yml
+            parameters:
+              bicepFolder        : initiatives
+              buildRepositoryName: ${{ repo.nameLong }}
+
+
+          - template: /pipelines/03_step/policy/pol_tsDeploy.yml
+            parameters:
+              bicepFolder        : assignments
+              buildRepositoryName: ${{ repo.nameLong }}
+
+
+          - script: |
+              env | sort
+              cd ${{ repo.nameLong }}
+              pwd
+              tree
+            displayName: 🐈 .Cat Env Variables

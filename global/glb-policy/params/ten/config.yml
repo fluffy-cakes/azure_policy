@@ -1,0 +1,3 @@
+variables:
+  common_svcConnectionSsv     : global_global
+  common_svcConnectionSecAdmin: global_global

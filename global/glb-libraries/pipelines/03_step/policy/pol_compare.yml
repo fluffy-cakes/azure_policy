@@ -1,0 +1,29 @@
+parameters:
+  mgmtGroupName: ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 📄 .Compare Definitions
+  name       : compare_definitions
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSecAdmin)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_compareDefinitions.ps1
+    scriptType            : filePath
+    ScriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"
+
+
+- task: AzurePowerShell@5
+  displayName: 📄 .Compare Initiatives
+  name       : compare_initiatives
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSecAdmin)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_compareInitiatives.ps1
+    scriptType            : filePath
+    ScriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"

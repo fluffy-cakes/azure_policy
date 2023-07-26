@@ -1,0 +1,35 @@
+name: BuildPolicyDefinitions 🏗️  ~ $(Date:yyyy-MM-dd HH-mm) UTC
+
+pr: none
+trigger: none
+
+resources:
+  repositories:
+  - repository: libraries
+    type      : git
+    name      : Global/glb-libraries
+    ref       : refs/heads/main
+
+  - repository: policy
+    type      : git
+    name      : Global/glb-policy
+    ref       : refs/heads/main
+
+parameters:
+- name: env
+  displayName: Please select your environment
+  default: "ten"
+  values:
+  - ten
+
+variables:
+- name : POLICY_TENANT
+  value: ${{ parameters.env }}
+
+- template: /params/${{ parameters.env }}/config.yml
+
+
+stages:
+- template: /pipelines/01_stage/pol_buildDefinitions.yml@libraries
+  parameters:
+    environment: ${{ parameters.env }}

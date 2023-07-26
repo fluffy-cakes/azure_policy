@@ -1,0 +1,47 @@
+{
+    "initiativeName": "glb-gen-root",
+    "initiativeParams": {
+        "listOfAllowedLocations": {
+            "value": [
+                "uksouth"
+            ]
+        },
+        "listOfClassifications": {
+            "value": [
+                "Confidential",
+                "Highly Confidential"
+            ]
+        },
+        "listOfResourceTypesAllowed": {
+            "value": [
+                "Microsoft.Compute/disks",
+                "Microsoft.Compute/galleries",
+                "Microsoft.Compute/galleries/images",
+                "Microsoft.Compute/galleries/images/versions",
+                "Microsoft.Compute/images",
+                "Microsoft.Compute/restorePointCollections",
+                "Microsoft.Compute/virtualMachines",
+                "Microsoft.Compute/virtualMachines/extensions",
+                "Microsoft.Compute/virtualMachineScaleSets",
+                "Microsoft.Compute/virtualMachineScaleSets/virtualMachines",
+                "Microsoft.Insights/actiongroups",
+                "Microsoft.Insights/activitylogalerts",
+                "Microsoft.Insights/metricalerts",
+                "Microsoft.Insights/scheduledqueryrules",
+                "Microsoft.KeyVault/vaults",
+                "Microsoft.KeyVault/vaults/secrets",
+                "Microsoft.ManagedIdentity/userAssignedIdentities",
+                "Microsoft.Network/connections",
+                "Microsoft.Network/networkInterfaces",
+                "Microsoft.Network/networkSecurityGroups",
+                "Microsoft.Network/networkSecurityGroups/securityRules",
+                "Microsoft.Network/networkWatchers",
+                "Microsoft.Network/networkWatchers/flowLogs",
+                "Microsoft.Network/publicIPAddresses",
+                "Microsoft.Network/privateEndpoints",
+                "Microsoft.Network/routeTables",
+                "Microsoft.Network/routeTables/routes"
+            ]
+        }
+    }
+}

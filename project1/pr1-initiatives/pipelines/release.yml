@@ -1,0 +1,63 @@
+name: BuildPolicyInitiatives 🏗️  ~ $(Date:yyyy-MM-dd HH-mm) UTC
+
+
+pr: none
+trigger: none
+
+
+resources:
+  repositories:
+  - repository: libraries
+    type      : git
+    name      : Global/glb-libraries
+    ref       : refs/heads/main
+
+  - repository: initiatives
+    type      : git
+    name      : Project1/pr1-initiatives
+    ref       : refs/heads/main
+
+  - repository: platform
+    type      : git
+    name      : Project1/pr1-platform
+    ref       : refs/heads/main
+
+
+parameters:
+- name       : env
+  displayName: Please select your environment
+  default    : tst
+  values     :
+  - tst
+
+- name       : tenant
+  displayName: Please select your tenant
+  default    : ten
+  values     :
+  - ten
+
+
+variables:
+- name : POLICY_ENVIRONMENT
+  value: ${{ parameters.env }}
+
+- name : POLICY_TENANT
+  value: ${{ parameters.tenant }}
+
+- template: /params/${{ parameters.env }}/config.yml
+
+
+stages:
+- template: /pipelines/01_stage/pol_release.yml@libraries
+  parameters:
+    environment: ${{ parameters.env }}
+    mgmtGroupName:
+    - name        : project1
+      shortEnv    : ${{ parameters.env }}
+      repositories:
+      - nameLong : pr1-initiatives
+        nameShort: initiatives
+
+      - nameLong : pr1-platform
+        nameShort: platform
+

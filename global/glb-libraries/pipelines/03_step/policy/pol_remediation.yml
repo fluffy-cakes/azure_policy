@@ -1,0 +1,45 @@
+parameters:
+  mgmtGroupName: ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: ⬇️ .Apply RPC on Mgmt Grp
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionUaa)
+    failOnStandardError   : true
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_resourceContribRole.ps1
+    scriptType            : filePath
+    ScriptArguments       : >-
+      -assignType    "apply"
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"
+
+
+- task: AzurePowerShell@5
+  displayName: 🎠 .Remediate Policies
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionUaa)
+    failOnStandardError   : true
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_remediate.ps1
+    scriptType            : filePath
+    ScriptArguments       : >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"
+
+
+- task: AzurePowerShell@5
+  displayName: ⬆️ .Remove RPC on Mgmt Grp
+  condition  : always()
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionUaa)
+    failOnStandardError   : true
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_resourceContribRole.ps1
+    scriptType            : filePath
+    ScriptArguments       : >-
+      -assignType    "remove"
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"

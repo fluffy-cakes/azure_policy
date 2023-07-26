@@ -1,0 +1,30 @@
+parameters:
+  mgmtGroupName: ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 🐲 .Get Template Specs
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSsv)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_getTs.ps1
+    scriptType            : filePath
+    workingDirectory      : $(System.DefaultWorkingDirectory)
+    ScriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"
+
+
+- task: AzurePowerShell@5
+  displayName: 🤷‍♂️ .Validate
+  name       : validate_${{ parameters.mgmtGroupName }}
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSecAdmin)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_validateInitAssign.ps1
+    scriptType            : filePath
+    workingDirectory      : $(System.DefaultWorkingDirectory)
+    ScriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"

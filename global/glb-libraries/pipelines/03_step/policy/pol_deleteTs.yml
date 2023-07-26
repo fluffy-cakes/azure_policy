@@ -1,0 +1,17 @@
+parameters:
+  condition    : ""
+  mgmtGroupName: ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 💥 .Delete Template Specs
+  condition  : ${{ parameters.condition }}
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSsv)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_deleteTs.ps1
+    scriptType            : filePath
+    scriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"

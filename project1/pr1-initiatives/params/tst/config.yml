@@ -1,0 +1,6 @@
+variables:
+  common_svcConnectionRead    : project1_global
+  common_svcConnectionSecAdmin: project1_project1
+  common_svcConnectionSsv     : project1_global
+  common_svcConnectionUaa     : project1_project1
+  common_svcConnectionUaaObjId: 255e50fa-9000-4113-9505-ec5871d47f8d

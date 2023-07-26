@@ -1,0 +1,17 @@
+parameters:
+  bicepFolder        : ""
+  buildRepositoryName: $(Build.Repository.Name)
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 📗 .Deploy TS ${{ parameters.bicepFolder }}
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSsv)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_tsDeploy.ps1
+    scriptType            : filePath
+    workingDirectory      : $(System.DefaultWorkingDirectory)/${{ parameters.buildRepositoryName }}/bicep/${{ parameters.bicepFolder }}
+    ScriptArguments: >-
+      -buildRepositoryName: "${{ parameters.buildRepositoryName }}"

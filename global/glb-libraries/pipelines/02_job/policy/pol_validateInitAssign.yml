@@ -1,0 +1,41 @@
+parameters:
+  environment  : ""
+  mgmtGroupName: ""
+  repositories : {}
+  shortEnv     : ""
+
+
+jobs:
+- deployment : validate_${{ parameters.mgmtGroupName }}
+  displayName: Validate
+  environment: ${{ parameters.environment }}_Build
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: libraries
+        - ${{ each repo in parameters.repositories }}:
+          - checkout: ${{ repo.nameShort }}
+
+
+        - template: /pipelines/03_step/policy/pol_compare.yml
+          parameters:
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+
+
+        - script: |
+            env | sort
+          displayName: 🐈 .Cat Env Variables
+
+
+
+        - template: /pipelines/03_step/policy/pol_validateInitAssign.yml
+          parameters:
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+
+
+        - script: |
+            env | sort
+          displayName: 🐈 .Cat Env Variables

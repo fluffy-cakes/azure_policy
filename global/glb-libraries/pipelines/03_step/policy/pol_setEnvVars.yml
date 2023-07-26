@@ -1,0 +1,16 @@
+parameters:
+  configYml: ""
+
+
+steps:
+- task: PowerShell@2
+  displayName: ♻️ .Set Env Vars
+  inputs:
+    errorActionPreference: stop
+    failOnStderr         : true
+    filePath             : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_setEnvVars.ps1
+    pwsh                 : true
+    targetType           : filePath
+    workingDirectory     : ${{ parameters.paramsDirectory }}
+    arguments: >-
+      -ConfigYml "${{ parameters.configYml }}"

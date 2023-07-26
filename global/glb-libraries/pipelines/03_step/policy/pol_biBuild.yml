@@ -1,0 +1,15 @@
+parameters:
+  bicepFolder        : ""
+  buildRepositoryName: $(Build.Repository.Name)
+
+
+steps:
+- task: AzureCLI@2
+  displayName        : 💪 .Bicep Build ${{ parameters.bicepFolder }}
+  inputs:
+    azureSubscription              : $(common_svcConnectionSsv)
+    powerShellErrorActionPreference: stop
+    scriptLocation                 : scriptPath
+    scriptPath                     : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_biBuild.ps1
+    scriptType                     : pscore
+    workingDirectory               : $(System.DefaultWorkingDirectory)/${{ parameters.buildRepositoryName }}/bicep/${{ parameters.bicepFolder }}

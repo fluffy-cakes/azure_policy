@@ -1,0 +1,18 @@
+parameters:
+  mgmtGroupName: ""
+  shortEnv     : ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 👨‍🎓 .Publish TS
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSecAdmin)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_tsPublish.ps1
+    scriptType            : filePath
+    workingDirectory      : $(System.DefaultWorkingDirectory)/$(Build.Repository.Name)/params/${{ parameters.shortEnv }}
+    ScriptArguments: >-
+      -mgmtGroupName "${{ parameters.mgmtGroupName }}"
+      -shortEnv      "${{ parameters.shortEnv }}"

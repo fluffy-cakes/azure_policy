@@ -1,0 +1,16 @@
+parameters:
+  environment    : ""
+  mgmGroupIds    : ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 📄 .Assign Definitions
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : ${{ parameters.svcConnection }}
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_tsPublish.ps1
+    scriptType            : filePath
+    ScriptArguments: >-
+      -mgmGroupIds "${{ parameters.mgmGroupIds }}"

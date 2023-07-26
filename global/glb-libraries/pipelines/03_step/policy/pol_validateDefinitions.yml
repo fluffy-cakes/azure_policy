@@ -1,0 +1,14 @@
+parameters:
+  mgmtGroupName: ""
+
+
+steps:
+- task: AzurePowerShell@5
+  displayName: 🤷‍♂️ .Validate Template Specs
+  inputs:
+    azurePowerShellVersion: latestVersion
+    azureSubscription     : $(common_svcConnectionSsv)
+    pwsh                  : true
+    scriptPath            : $(System.DefaultWorkingDirectory)/glb-libraries/scripts/policy/pol_validateDefinitions.ps1
+    scriptType            : filePath
+    workingDirectory      : $(System.DefaultWorkingDirectory)

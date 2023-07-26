@@ -1,0 +1,18 @@
+{
+    "p_assignmentParams": {
+        "initiativeName": "hubPlatform",
+        "initiativeParams": {
+            "listOfAllowedPorts": {
+                "value": [
+                    "443"
+                ]
+            },
+            "listOfAllowedProtocols": {
+                "value": [
+                    "Https"
+                ]
+            }
+        },
+        "initiativeScope": "project1"
+    }
+}

@@ -1,0 +1,38 @@
+{
+  "initiativeName": "pr1-mon-root",
+  "initiativeParams": {
+    "logAnalyticsWorkspaceId": {
+      "value": "/subscriptions/#{variables.dyn_sub_tst_pr1_hub_01}#/resourceGroups/uks-tst-pr1-hub-01-log-rsg/providers/Microsoft.OperationalInsights/workspaces/uks-tst-pr1-hub-01-law"
+    }
+  },
+  "roles": [
+    {
+      "name": "Contributor",
+      "scope": "/providers/Microsoft.Management/managementGroups/project1"
+    },
+    {
+      "name": "Security Admin",
+      "scope": "/providers/Microsoft.Management/managementGroups/project1"
+    },
+    {
+      "name": "Monitoring Contributor",
+      "scope": "/providers/Microsoft.Management/managementGroups/project1"
+    },
+    {
+      "name": "Network Contributor",
+      "scope": "/providers/Microsoft.Management/managementGroups/project1"
+    },
+    {
+      "name": "Log Analytics Contributor",
+      "scope": "/providers/Microsoft.Management/managementGroups/project1"
+    },
+    {
+      "name": "Monitoring Contributor",
+      "scope": "/subscriptions/#{variables.dyn_sub_tst_pr1_hub_01}#/resourceGroups/uks-tst-pr1-hub-01-log-rsg/providers/Microsoft.OperationalInsights/workspaces/uks-tst-pr1-hub-01-law"
+    },
+    {
+      "name": "Log Analytics Contributor",
+      "scope": "/subscriptions/#{variables.dyn_sub_tst_pr1_hub_01}#/resourceGroups/uks-tst-pr1-hub-01-log-rsg/providers/Microsoft.OperationalInsights/workspaces/uks-tst-pr1-hub-01-law"
+    }
+  ]
+}

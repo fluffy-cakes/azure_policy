@@ -1,0 +1,6 @@
+variables:
+  common_svcConnectionRead    : global_global
+  common_svcConnectionSecAdmin: global_global
+  common_svcConnectionSsv     : global_global
+  common_svcConnectionUaa     : global_global
+  common_svcConnectionUaaObjId: 06408120-8b23-41ec-8528-58206c7781a9

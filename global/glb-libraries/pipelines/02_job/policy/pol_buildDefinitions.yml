@@ -1,0 +1,31 @@
+parameters:
+  environment: ""
+
+
+jobs:
+- deployment :
+  displayName: Build Definitions
+  environment: ${{ parameters.environment }}_Build
+
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+        - checkout: libraries
+
+        - template: /pipelines/03_step/policy/pol_biBuild.yml
+          parameters:
+            bicepFolder  : definitions
+            svcConnection: $(common_svcConnectionSsv)
+
+
+        - template: /pipelines/03_step/policy/pol_tsDeploy.yml
+          parameters:
+            bicepFolder  : definitions
+            svcConnection: $(common_svcConnectionSsv)
+
+
+        - template: /pipelines/03_step/policy/pol_validateDefinitions.yml

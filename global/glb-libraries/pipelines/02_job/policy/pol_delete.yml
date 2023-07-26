@@ -1,0 +1,68 @@
+parameters:
+  environment  : ""
+  mgmtGroupName: ""
+  repositories : {}
+
+
+jobs:
+- deployment :
+  displayName: Delete
+  environment: ${{ parameters.environment }}_Delete
+
+  pool:
+    vmImage: ubuntu-latest
+
+  variables:
+    POLICY_ASSIGNMENT_LIST   : $[ stageDependencies.validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.outputs['validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.POLICY_ASSIGNMENT_LIST'] ]
+    POLICY_SETIDS_LIST       : $[ stageDependencies.validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.outputs['validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.POLICY_SETIDS_LIST'] ]
+    POLICY_DEFIDS_LIST       : $[ stageDependencies.validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.outputs['validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.POLICY_DEFIDS_LIST'] ]
+    POLICY_ASSIGNMENT_LIST_TS: $[ stageDependencies.validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.outputs['validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.POLICY_ASSIGNMENT_LIST_TS'] ]
+    POLICY_SETIDS_LIST_TS    : $[ stageDependencies.validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.outputs['validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.POLICY_SETIDS_LIST_TS'] ]
+    POLICY_DEFIDS_LIST_TS    : $[ stageDependencies.validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.outputs['validate_${{ parameters.mgmtGroupName }}.validate_${{ parameters.mgmtGroupName }}.POLICY_DEFIDS_LIST_TS'] ]
+
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+        - checkout: libraries
+
+
+        - script: |
+            env | sort
+            cd $(Build.Repository.Name)
+            pwd
+            tree
+          displayName: 🐈 .Cat Env Variables
+
+
+        - template: /pipelines/03_step/policy/pol_deleteTs.yml
+          parameters:
+            condition: |
+              and(
+                ne(variables.POLICY_ASSIGNMENT_LIST_TS, 'NONE'),
+                ne(variables.POLICY_SETIDS_LIST_TS, 'NONE'),
+                ne(variables.POLICY_DEFIDS_LIST_TS, 'NONE')
+              )
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+
+
+        - template: /pipelines/03_step/policy/pol_deletePolicies.yml
+          parameters:
+            condition    : ne(variables.POLICY_ASSIGNMENT_LIST, 'NONE')
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+            scope        : assignments
+
+
+        - template: /pipelines/03_step/policy/pol_deletePolicies.yml
+          parameters:
+            condition    : ne(variables.POLICY_SETIDS_LIST, 'NONE')
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+            scope        : initiatives
+
+
+        - template: /pipelines/03_step/policy/pol_deletePolicies.yml
+          parameters:
+            condition    : ne(variables.POLICY_DEFIDS_LIST, 'NONE')
+            mgmtGroupName: ${{ parameters.mgmtGroupName }}
+            scope        : definitions

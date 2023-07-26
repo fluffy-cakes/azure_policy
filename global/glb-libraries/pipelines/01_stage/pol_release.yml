@@ -1,0 +1,48 @@
+parameters:
+  environment    : ""
+  mgmtGroupName  : []
+
+
+stages:
+- ${{ each mgmtGroup in parameters.mgmtGroupName }}:
+
+  - stage: build_${{ mgmtGroup.name }}
+    displayName: 🏠 .Build ${{ mgmtGroup.name }}
+    jobs:
+    - template: /pipelines/02_job/policy/pol_buildDeploy.yml
+      parameters:
+        environment  : ${{ parameters.environment }}
+        mgmtGroupName: ${{ mgmtGroup.name }}
+        repositories:  ${{ mgmtGroup.repositories }}
+        shortEnv     : ${{ mgmtGroup.shortEnv }}
+
+
+  - stage: validate_${{ mgmtGroup.name }}
+    displayName: 👌 .Validate ${{ mgmtGroup.name }}
+    jobs:
+    - template: /pipelines/02_job/policy/pol_validateInitAssign.yml
+      parameters:
+        environment  : ${{ parameters.environment }}
+        repositories:  ${{ mgmtGroup.repositories }}
+        mgmtGroupName: ${{ mgmtGroup.name }}
+
+
+  - stage: delete_${{ mgmtGroup.name }}
+    displayName: 🗑️ .Delete ${{ mgmtGroup.name }}
+    jobs:
+    - template: /pipelines/02_job/policy/pol_delete.yml
+      parameters:
+        environment  : ${{ parameters.environment }}
+        repositories:  ${{ mgmtGroup.repositories }}
+        mgmtGroupName: ${{ mgmtGroup.name }}
+
+
+  - stage:
+    displayName: ⚔️ .Deploy ${{ mgmtGroup.name }}
+    jobs:
+    - template: /pipelines/02_job/policy/pol_assign.yml
+      parameters:
+        environment  : ${{ parameters.environment }}
+        mgmtGroupName: ${{ mgmtGroup.name }}
+        repositories : ${{ mgmtGroup.repositories }}
+        shortEnv     : ${{ mgmtGroup.shortEnv }}
